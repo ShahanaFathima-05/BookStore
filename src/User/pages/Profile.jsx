@@ -4,6 +4,7 @@ import Header from '../components/Header'
 import Footer from '../components/Footer'
 import { FaUserEdit } from "react-icons/fa"
 import ProfileUpdate from '../components/ProfileUpdate'
+import { useEffect } from 'react'
 
 function Profile() {
 
@@ -13,8 +14,24 @@ function Profile() {
   const [bookStatus, setBookStatus] = useState(false)
   const [purchaseStatus, setPurchaseStatus] = useState(false)
 
+  const [dp, setdp] = useState("")
+  const [name, setName] = useState("")
+  const [email,setemail]=useState('')
+  const [bio,setBio]=useState('')
+
   const trueStyle='border-t-1 border-s-1 border-e-1 p-3'
   const falseStyle='border-b-1 p-3'
+
+
+  useEffect(()=>{
+  if (sessionStorage.getItem('token') && sessionStorage.getItem('user')){
+    const userobj = JSON.parse(sessionStorage.getItem('user'))
+    setName(userobj.name || userobj.username || '')
+    setdp(userobj?.picture)
+    setemail(userobj?.email)
+    setBio(userobj?.bio)
+  }
+  },[])
 
   return (
     <div className="relative">
@@ -28,21 +45,20 @@ function Profile() {
 
    
       <div className="w-full">
-        <div className="relative bg-black h-[40vh]">
+        <div className="relative bg-amber-900 h-[40vh]">
           <div className="absolute h-[50%] -bottom-20 left-7">
-            <img
-              src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png"
+            <img 
+              src={dp}
               className="h-full"
-              alt="Profile"
-            />
+              alt="Profile"  />
           </div>
 
         </div>
 
         <div className="px-7">
 
-          <h1 className="mt-24 font-bold text-2xl">
-            Username
+          <h1 className="mt-24 font-bold text-2xl" >
+            {name}
           </h1>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
@@ -50,10 +66,7 @@ function Profile() {
             {/* Bio */}
             <div>
               <p className="text-justify">
-                Lorem ipsum dolor sit amet consectetur, adipisicing elit.
-                Quidem ex pariatur aliquid voluptatum nisi veritatis itaque
-                facere aliquam. Illum, sit dolore ab nobis adipisci ea?
-                Maiores officiis quam ipsam enim.
+                {bio}
               </p>
             </div>
 
@@ -61,7 +74,7 @@ function Profile() {
             <div className="flex justify-start md:justify-end">
 
               <button
-                className="rounded bg-blue-600 text-white flex gap-2 items-center p-3 m-3 hover:bg-blue-700"
+                className="rounded bg-amber-900 text-white flex gap-2 items-center p-3 m-3 hover:bg-amber-800"
                 onClick={() => setsideBar(!sideBar)}
               >
                 Edit
@@ -111,7 +124,7 @@ function Profile() {
             {
   sellStatus &&
 
-  <div className="bg-gray-600 p-5 m-5 rounded-xl">
+  <div className="bg-amber-900 p-5 m-5 rounded-xl">
 
     <h1 className="text-center text-white text-2xl font-bold mb-5">
       Book Details
@@ -177,20 +190,117 @@ function Profile() {
 
             {
               bookStatus &&
-              
-                <h2 className="text-xl font-bold">
-                  My Books
-                </h2>
-               
+
+              <div
+  className="border p-3 mb-4"
+  style={{ width: "90%", margin: "auto" }}
+>
+  <div className="row align-items-center">
+
+    {/* Book Details */}
+    <div className="col-md-9">
+
+      <h4 className="fw-bold text-center">
+        Harry Potter
+      </h4>
+
+      <h5 className="text-success text-center">
+        ₹500
+      </h5>
+
+      <p>
+        Harry Potter is a young wizard who discovers his magical
+        heritage and begins an exciting journey at Hogwarts School
+        of Witchcraft and Wizardry. Along the way, he makes new
+        friends, faces dangerous challenges, and uncovers secrets
+        about his past. The story is filled with magic, friendship,
+        adventure, and unforgettable moments.
+      </p>
+
+      <button className="btn btn-outline-success">
+        APPROVED
+      </button>
+
+    </div>
+
+    {/* Book Image + Remove */}
+    <div className="col-md-3 text-center">
+
+      <img
+        src="https://m.media-amazon.com/images/I/81YOuOGFCJL.jpg"
+        alt="Harry Potter"
+        style={{
+          width: "105px",
+          height: "150px",
+          objectFit: "cover"
+        }}
+      />
+
+      <br />
+
+      <button className="btn btn-danger mt-2">
+        REMOVE
+      </button>
+
+    </div>
+
+  </div>
+</div>
+                                      
             }
 
             {
               purchaseStatus &&
               
-                <h2 className="text-xl font-bold">
-                  Purchases
-                </h2>
-               
+                <div
+  className="border p-3 mb-4"
+  style={{ width: "90%", margin: "auto" }}
+>
+  <div className="row align-items-center">
+
+    {/* Book Details */}
+    <div className="col-md-9">
+
+      <h4 className="fw-bold text-center">
+        Harry Potter
+      </h4>
+
+      <h5 className="text-success text-center">
+        ₹500
+      </h5>
+
+      <p>
+        Harry Potter is a young wizard who discovers his magical
+        heritage and begins an exciting journey at Hogwarts School
+        of Witchcraft and Wizardry. Along the way, he makes new
+        friends, faces dangerous challenges, and uncovers secrets
+        about his past. The story is filled with magic, friendship,
+        adventure, and unforgettable moments.
+      </p>
+
+      <button className="btn btn-outline-success">
+        PURCHASED
+      </button>
+
+    </div>
+
+    {/* Book Image */}
+    <div className="col-md-3 text-center">
+
+      <img
+        src="https://m.media-amazon.com/images/I/81YOuOGFCJL.jpg"
+        alt="Harry Potter"
+        style={{
+          width: "105px",
+          height: "150px",
+          objectFit: "cover"
+        }}
+      />
+
+    </div>
+
+  </div>
+</div>
             }
 
           </div>

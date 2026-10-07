@@ -5,7 +5,7 @@ import { CiLinkedin } from "react-icons/ci";
 
 function Footer() {
   return (
-    <footer className="w-full bg-gray-950 text-white px-5 py-10">
+    <footer className="w-full bg-amber-900 text-white px-5 py-10">
       <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
 
         {/* ABOUT US */}
