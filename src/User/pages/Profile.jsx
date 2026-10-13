@@ -5,6 +5,8 @@ import Footer from '../components/Footer'
 import { FaUserEdit } from "react-icons/fa"
 import ProfileUpdate from '../components/ProfileUpdate'
 import { useEffect } from 'react'
+import axiosInstance from '../../api/axiosInstance'
+import SellBook from '../components/SellBook'
 
 function Profile() {
 
@@ -47,10 +49,14 @@ function Profile() {
       <div className="w-full">
         <div className="relative bg-amber-900 h-[40vh]">
           <div className="absolute h-[50%] -bottom-20 left-7">
-            <img 
-              src={dp}
-              className="h-full"
-              alt="Profile"  />
+            {
+                dp==" " ?
+                <img src="" alt="" />
+                :
+                dp.includes('lh3.googleusercontent.com')?
+                <img src={dp} alt="profile" className='w-28 h-28'/>:
+                <img src={`${axiosInstance.defaults.baseURL}/uploads/${dp}`}  alt="" className='w-28 h-28' />
+            }
           </div>
 
         </div>
@@ -123,69 +129,8 @@ function Profile() {
 
             {
   sellStatus &&
+            <SellBook/>
 
-  <div className="bg-amber-900 p-5 m-5 rounded-xl">
-
-    <h1 className="text-center text-white text-2xl font-bold mb-5">
-      Book Details
-    </h1>
-
-    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-
-      {/* Left Column */}
-      <div className="px-2">
-
-        <input
-          type="text"
-          placeholder="Title"
-          className="w-full bg-white p-3 mb-3 rounded"
-        />
-
-        <input
-          type="text"
-          placeholder="Author"
-          className="w-full bg-white p-3 mb-3 rounded"
-        />
-
-        <input
-          type="number"
-          placeholder="No. of pages"
-          className="w-full bg-white p-3 mb-3 rounded"
-        />
-        <input type="text" className="w-full bg-white p-3 mb-3 rounded" placeholder='Image URL' />
-        <input type="text" className="w-full bg-white p-3 mb-3 rounded" placeholder='Price' />
-        <input type="text" className="w-full bg-white p-3 mb-3 rounded" placeholder='Discount Price' />
-        <textarea name="" placeholder='Abstract'  className="w-full bg-white p-3 mb-3 rounded" rows={'8'} id=""></textarea>
-
-      </div>
-
-      {/* Right Column */}
-      <div className="px-2">
-
-        <input
-          type="number"
-          placeholder="Publisher"
-          className="w-full bg-white p-3 mb-3 rounded"
-        />
-
-        <input
-          type="text"
-          placeholder="Language"
-          className="w-full bg-white p-3 mb-3 rounded"
-        />
-        <input type="text" className="w-full bg-white p-3 mb-3 rounded" placeholder='ISBN' />
-        <input type="text" className="w-full bg-white p-3 mb-3 rounded" placeholder='Category' />
-        <label htmlFor="img">
-          <input type="file" name="" id="img" className='hidden' />
-          <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTA-3SDTEq5gqOtVna-CCX-Up_4F0U4Z72jg_8cVx__uA&s=10" className='rounded-full h-28 w-28 m-5' alt="" />
-        </label>
-        <div className="flex justify-between">
-            <button className="bg-white border text-black px-5 py-2 rounded">submit</button>
-            <button className="bg-black text-white px-5 py-2 rounded">Cancel</button>
-        </div>
-      </div>
-    </div>
-    </div>
             }
 
             {

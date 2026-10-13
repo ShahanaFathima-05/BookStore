@@ -4,16 +4,27 @@ import Preloader from '../components/Preloader'
 import Header from '../User/components/Header'
 import Footer from '../User/components/Footer'
 import { FaSearch } from "react-icons/fa";
+import { latestBooksApi } from '../services/allApi'
 
 function Home() {
 
   const [loadStatus,setLoadStatus]=useState(true)
+  const [latest,setLatest]=useState([])
 
   useEffect(()=>{
     setTimeout(()=>{
       setLoadStatus(false)
     },2000)
+    handleLatestBooks()
   },[])
+
+
+  const handleLatestBooks=async()=>{
+    const response=await latestBooksApi()
+    if(response.status===200){
+      setLatest(response.data)
+  }
+}
 
   return (
     <>
@@ -42,13 +53,22 @@ function Home() {
          <section className="w-full">
           <h1 className="text-2xl text-center my-2">New Arrivals</h1>
           <h1 className="text-3xl text-center my-2">Explore Latest Collections</h1>
-          <div className="flex flex-wrap justify-around my-5">
-            <div className="w-[16rem] shadow-2xl p-3">
-              <img src="https://encrypted-tbn3.gstatic.com/shopping?q=tbn:ANd9GcRvdgaJ2gjdr9IwrNGGQNpNkCAcnXLD6MUtSZOZvyyJqOo6YLMyj8M69PLdXSUFPZ1Y_leMIbFyUuZaWmu2tuF9oMxMaMm5ixfPahzYxtU&usqp=CAc" alt=""className="h-75 w-full object-cover"/>
-              <h1 className="my-2 text-center font-bold">Forty Rules Of Love</h1>
-              <h2 className="text-center text-green-900">₹399</h2>
+          {
+            latest.length>0 ?
+            <div className="flex flex-wrap justify-around my-5">
+              {
+                latest.map((item) => (
+                  <div className="w-[16rem] shadow-2xl p-3">
+                    <img src={item.imageUrl} alt={item.title} className="h-75 w-full object-cover"/>
+                    <h1 className="my-2 text-center font-bold">{item.title}</h1>
+                  </div>
+                ))
+              }
             </div>
-          </div>
+            :
+            <p className="text-center">No latest books available.</p>
+          }
+          
          </section>
 
          <section className="w-full my-5 mx-5 mt-5">
@@ -94,6 +114,6 @@ function Home() {
     }
     </>
   )
-}
 
+}
 export default Home

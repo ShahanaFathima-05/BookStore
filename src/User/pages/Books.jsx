@@ -1,8 +1,26 @@
 import React from 'react'
 import Header from '../components/Header'
 import Footer from '../components/Footer'
+import {booklistApi} from '../../services/allApi'
+import { useEffect,useState } from 'react'
 
 function Books() {
+  
+  const [booklist,setBooklist]=useState([])
+  const [filter,setFilter]=useState([])
+
+  useEffect(()=>{
+    handleBooklist()
+  },[])
+
+  const handleBooklist=async()=>{
+    const response=await booklistApi()
+    if(response.status===200){
+      setBooklist(response.data)
+      setFilter(response.data.map((item) => item.category))
+    }
+  }
+   
   return (
     <>
     
@@ -20,24 +38,40 @@ function Books() {
         <div className="col-span-2">
           <div className="flex justify-between">
             <h1 className="text-xl font-bold">Filters</h1>
-
           </div>
-          <div className="my-3">
-            <label htmlFor=""><input type="radio" name="" id="" /> No-Filter</label>
+          <div className="my-3 flex flex-col gap-2">
+            <label htmlFor=""><input type="radio" name="filter" id="" /> No-Filter</label>
+            {
+              filter.map((item)=>(
+                 <label htmlFor=""><input type="radio" name="filter" id="" /> {item}</label>
+              ))
+            }
+           
           </div>
         </div>
 
         <div className="col-span-2">
           <div className="w-full">
+            {
+            booklist.length>0 ?
             <div className="flex flex-wrap justify-around my-5">
-            <div className="w-[16rem] shadow-2xl p-3">
-              <img src="https://encrypted-tbn3.gstatic.com/shopping?q=tbn:ANd9GcRvdgaJ2gjdr9IwrNGGQNpNkCAcnXLD6MUtSZOZvyyJqOo6YLMyj8M69PLdXSUFPZ1Y_leMIbFyUuZaWmu2tuF9oMxMaMm5ixfPahzYxtU&usqp=CAc" alt=""className="h-75 w-full object-cover"/>
-              <h1 className="my-2 text-center font-bold">Forty Rules Of Love</h1>
-              <h2 className="text-center text-green-900">₹399</h2>
+              {
+                booklist.map((item) => (
+                  <div className="w-[16rem] shadow-2xl p-3">
+                    <img src={item.imageUrl} alt={item.title} className="h-75 w-full object-cover"/>
+                    <h1 className="my-2 text-center font-bold">{item.title}</h1>
+                  </div>
+                ))
+              }
             </div>
-          </div>
+            :
+            <div className="flex justify-center items-center h-[50vh]">
+              <img src="https://y.getyarn.io/34d3abe4-e7eb-4308-895d-e386731a57d9_text.gif" alt="" />
+            </div>
+          }
           </div>
         </div>
+        
       </div>
     </div>
 

@@ -18,3 +18,15 @@ export const googleAuthApi=async(data)=>{
 export const profileEditApi=async (data)=>{
     return await apiService('PUT','./update',data)
 }
+
+export const addBookApi=async (data)=>{
+    return await apiService('POST','/addbook',data)
+}
+
+export const latestBooksApi=async()=>{
+    return await apiService('GET','/latestbooks')
+}
+
+export const booklistApi=async()=>{
+    return await apiService('GET','/booklist')
+}

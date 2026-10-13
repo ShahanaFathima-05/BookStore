@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { FaInstagram, FaTwitter, FaFacebook } from "react-icons/fa";
 import { FaAngleUp, FaAngleDown } from "react-icons/fa";
 import { Link } from 'react-router-dom';
+import axiosInstance from '../../api/axiosInstance';
 
 function Header() {
 
@@ -11,16 +12,20 @@ function Header() {
   const [name, setName] = useState("");
   const [token, setToken] = useState("");
 
-  useEffect(() => {
-    if (sessionStorage.getItem('token') && sessionStorage.getItem('user')) {
-      const userToken = sessionStorage.getItem('token')
-      const userobj = JSON.parse(sessionStorage.getItem('user'))
-      setToken(userToken)
-      setName(userobj.name || userobj.username || '')
-      setdp(userobj.picture)
-    }
+  
+useEffect(() => {
+    const userToken = sessionStorage.getItem('token')
+    const storedUser = sessionStorage.getItem('user')
 
-  }, [])
+    if (userToken && storedUser) {
+        const userobj = JSON.parse(storedUser)
+
+        setToken(userToken)
+        setName(userobj.username || userobj.name || '')
+        setdp(userobj.picture || '')
+    }
+}, [])
+
 
   return (
     <header className="w-full">
@@ -72,12 +77,15 @@ function Header() {
               >
 
                 {
-                dp && (
-                  <img src={dp} alt="profile" className="w-7 h-7 rounded-full"/>
-                )
+                dp==" " ?
+                <img src="" alt="" />
+                :
+                dp.includes('lh3.googleusercontent.com')?
+                <img src={dp} alt="profile" className='w-28 h-28'/>:
+                <img src={`${axiosInstance.defaults.baseURL}/uploads/${dp}`} width={'50px'} alt="" />
                 }
 
-                {name || 'User'}
+                {name}
 
                 {
                   dropDown

@@ -45,37 +45,64 @@ function ProfileUpdate({ setsideBar }) {
       setsideBar(false)
     }
 
-    const handleprofileupdate=async()=>{
-      const {username,email,password,bio}=userdata
-      if(!username || !email || !password || !bio){
-        toast.warning('Enter Valid Inputs')
-      }
-      else{
-        if(userdata.picture){
-          const formData=new FormData()
-          formData.append('id',userdata.id)
-          formData.append('username',userdata.username)
-          formData.append('password',userdata.password)
-          formData.append('role',userdata.role)
-          formData.append('email',userdata.email)
-          formData.append('bio',userdata.bio)
-          formData.append('picture',userdata.picture)
-          const response=await profileEditApi(formData)
-          console.log(response)
-          if(response.status===200){
-            toast.success('Profile Upadted')
-            setTimeout(()=>{
-              handleCancel()
-              nav('/')
-            },2000)
-          }
-        }
-        else{
-          const response=await profileEditApi(userdata)
-          console.log(response)
-        }
-      }
+    
+const handleprofileupdate = async () => {
+    const { username, email, password, bio } = userdata
+
+    if (!username.trim() || !email.trim() || !bio.trim()) {
+        toast.warning('Enter valid inputs')
+        return
     }
+
+    const formData = new FormData()
+
+    formData.append('id', userdata.id)
+    formData.append('username', username)
+    formData.append('email', email)
+    formData.append('bio', bio)
+    formData.append('role', userdata.role)
+
+    if (password.trim()) {
+        formData.append('password', password)
+    }
+
+    if (fileType && userdata.picture) {
+        formData.append('picture', userdata.picture)
+    }
+
+    const response = await profileEditApi(formData)
+
+    console.log('API response:', response.data)
+
+    if (response.status === 200) {
+        const oldUser = JSON.parse(
+            sessionStorage.getItem('user') || '{}'
+        )
+
+        const updatedUser = {
+            ...oldUser,
+            username,
+            email,
+            bio,
+            role: userdata.role,
+            picture: response.data.user?.picture ||
+                     response.data.updatedUser?.picture ||
+                     response.data.picture ||
+                     existingPicture
+        }
+
+        sessionStorage.setItem('user', JSON.stringify(updatedUser))
+
+        toast.success('Profile updated successfully')
+
+        setTimeout(() => {
+            setsideBar(false)
+            nav('/')
+            window.location.reload()
+        }, 1500)
+    }
+}
+
   
 
   return (
