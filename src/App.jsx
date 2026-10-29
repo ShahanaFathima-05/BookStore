@@ -13,6 +13,9 @@ import Dashboard from './Admin/pages/Dashboard'
 import Resources from './Admin/pages/Resources'
 import Settings from './Admin/pages/Settings'
 
+import PaymentFailed from './User/pages/PaymentFailed'
+import PaymentSuccess from './User/pages/PaymentSuccess'
+
 import Pnf from './pages/Pnf'
 
 function App() {
@@ -28,6 +31,8 @@ function App() {
         <Route path='booksdetail/:bid' element={<BookDetail/>} />
         <Route path='contact' element={<Contact/>} />
         <Route path='profile' element={<Profile/>} />
+        <Route path='success' element={<PaymentSuccess/>} />
+        <Route path='failed' element={<PaymentFailed/>} />
 
         <Route path='admin' element={<Dashboard/>} />
         <Route path='admin/resource' element={<Resources/>} />

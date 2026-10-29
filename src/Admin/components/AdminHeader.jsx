@@ -1,7 +1,16 @@
 import React from 'react'
 import { CiPower } from "react-icons/ci"
+import { useNavigate } from 'react-router-dom'
 
 function AdminHeader() {
+
+  const nav=useNavigate()
+
+ const logout=()=>{
+    sessionStorage.clear()
+    nav('/auth')
+  }
+   
   return (
     <>
       <div className="w-full">
@@ -21,7 +30,7 @@ function AdminHeader() {
             </h1>
           </div>
 
-          <button className="flex gap-1 items-center p-3 border-2 rounded-lg hover:bg-black hover:text-white">
+          <button onClick={logout} className="flex gap-1 items-center p-3 border-2 rounded-lg hover:bg-black hover:text-white">
             Logout
             <CiPower />
           </button>

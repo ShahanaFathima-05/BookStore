@@ -1,15 +1,21 @@
-import { useEffect,useState } from 'react'
+import { useEffect,useState,useContext } from 'react'
 import React from 'react'
 import Preloader from '../components/Preloader'
 import Header from '../User/components/Header'
 import Footer from '../User/components/Footer'
 import { FaSearch } from "react-icons/fa";
 import { latestBooksApi } from '../services/allApi'
+import { SearchContext } from '../contextApi/SharedContext'
+import { useNavigate } from 'react-router-dom'
+import { ToastContainer,toast } from 'react-toastify'
 
 function Home() {
 
   const [loadStatus,setLoadStatus]=useState(true)
   const [latest,setLatest]=useState([])
+  const {search,setSearch}=useContext(SearchContext)
+
+  const nav=useNavigate()
 
   useEffect(()=>{
     setTimeout(()=>{
@@ -25,6 +31,19 @@ function Home() {
       setLatest(response.data)
   }
 }
+
+  const handleSearchnavigate=()=>{
+    if(sessionStorage.getItem('token')){
+      if(search!==''){
+        nav('/books')
+      }else{
+        toast.info('Please enter a book title to search')
+      }
+    }
+    else{
+      toast.info('Please login to search books')
+    }
+  }
 
   return (
     <>
@@ -43,8 +62,8 @@ function Home() {
               <h1 className="text-5xl">Wonderful Gifts</h1>
               <h4 className="text-3xl">Give your Family and Friends a Book</h4>
               <div className="relative">
-                <input type="text" placeholder='Search Books' className="w-full bg-white text-black px-3 py-3 rounded-2xl" />
-                <FaSearch className='absolute top-3 right-4 text-black'/>
+                <input type="text" placeholder='Search Books' onChange={(e)=>setSearch(e.target.value)} className="w-full bg-white text-black px-3 py-3 rounded-2xl" />
+                <FaSearch className='absolute top-3 right-4 text-black' onClick={handleSearchnavigate}/>
               </div>
             </div>
           </div>
@@ -105,6 +124,8 @@ function Home() {
             Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, magni harum adipisci facere ipsam et est sed ratione facilis, quae doloremque libero labore incidunt quibusdam dolor. Odit deleniti sit rem!
           </p>  
          </section>
+
+          <ToastContainer position='top-center' autoClose={'3000'}/>
          
        </div>
        

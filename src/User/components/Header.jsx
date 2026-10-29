@@ -3,6 +3,7 @@ import { FaInstagram, FaTwitter, FaFacebook } from "react-icons/fa";
 import { FaAngleUp, FaAngleDown } from "react-icons/fa";
 import { Link } from 'react-router-dom';
 import axiosInstance from '../../api/axiosInstance';
+import { useNavigate } from 'react-router-dom';
 
 function Header() {
 
@@ -12,19 +13,26 @@ function Header() {
   const [name, setName] = useState("");
   const [token, setToken] = useState("");
 
-  
-useEffect(() => {
+  const nav=useNavigate()
+
+
+  useEffect(() => {
     const userToken = sessionStorage.getItem('token')
     const storedUser = sessionStorage.getItem('user')
 
     if (userToken && storedUser) {
-        const userobj = JSON.parse(storedUser)
+      const userobj = JSON.parse(storedUser)
 
-        setToken(userToken)
-        setName(userobj.username || userobj.name || '')
-        setdp(userobj.picture || '')
+      setToken(userToken)
+      setName(userobj.username || userobj.name || '')
+      setdp(userobj.picture || '')
     }
-}, [])
+  }, [])
+
+  const logout=()=>{
+    sessionStorage.clear()
+    nav('/auth')
+  }
 
 
   return (
@@ -60,66 +68,66 @@ useEffect(() => {
           {
             token === '' ?
 
-            <Link
-              to="/auth"
-              className="border-2 px-3 py-1 rounded-lg hover:bg-white hover:text-black transition-colors"
-            >
-              Login
-            </Link>
-
-            :
-
-            <div className="relative">
-
-              <button
-                onClick={() => setDropdown(!dropDown)}
-                className="border-2 px-3 py-1 rounded-lg hover:bg-white hover:text-black transition-colors flex items-center gap-2"
+              <Link
+                to="/auth"
+                className="border-2 px-3 py-1 rounded-lg hover:bg-white hover:text-black transition-colors"
               >
+                Login
+              </Link>
+
+              :
+
+              <div className="relative">
+
+                <button
+                  onClick={() => setDropdown(!dropDown)}
+                  className="border-2 px-3 py-1 rounded-lg hover:bg-white hover:text-black transition-colors flex items-center gap-2"
+                >
+
+                  {
+                    dp == " " ?
+                      <img src="" alt="" />
+                      :
+                      dp.includes('lh3.googleusercontent.com') ?
+                        <img src={dp} alt="profile" className='w-28 h-28' /> :
+                        <img src={`${axiosInstance.defaults.baseURL}/uploads/${dp}`} width={'50px'} alt="" />
+                  }
+
+                  {name}
+
+                  {
+                    dropDown
+                      ?
+                      <FaAngleUp />
+                      :
+                      <FaAngleDown />
+                  }
+
+                </button>
 
                 {
-                dp==" " ?
-                <img src="" alt="" />
-                :
-                dp.includes('lh3.googleusercontent.com')?
-                <img src={dp} alt="profile" className='w-28 h-28'/>:
-                <img src={`${axiosInstance.defaults.baseURL}/uploads/${dp}`} width={'50px'} alt="" />
+                  dropDown &&
+                  <div className="absolute right-0 top-12 w-32 bg-white text-black rounded-lg shadow-lg p-2 z-50">
+
+                    <Link
+                      to="/profile"
+                      className="block px-3 py-2 rounded hover:bg-gray-200"
+                      onClick={() => setDropdown(false)}
+                    >
+                      Profile
+                    </Link>
+
+                    <button
+                      className="w-full text-left px-3 py-2 rounded hover:bg-gray-200 text-red-600"
+                      onClick={logout}
+                    >
+                      Logout
+                    </button>
+
+                  </div>
                 }
 
-                {name}
-
-                {
-                  dropDown
-                    ?
-                    <FaAngleUp />
-                    :
-                    <FaAngleDown />
-                }
-
-              </button>
-
-              {
-                dropDown &&
-                <div className="absolute right-0 top-12 w-32 bg-white text-black rounded-lg shadow-lg p-2 z-50">
-
-                  <Link
-                    to="/profile"
-                    className="block px-3 py-2 rounded hover:bg-gray-200"
-                    onClick={() => setDropdown(false)}
-                  >
-                    Profile
-                  </Link>
-
-                  <button
-                    className="w-full text-left px-3 py-2 rounded hover:bg-gray-200 text-red-600"
-                    onClick={() => setDropdown(false)}
-                  >
-                    Logout
-                  </button>
-
-                </div>
-              }
-
-            </div>
+              </div>
           }
 
         </div>
