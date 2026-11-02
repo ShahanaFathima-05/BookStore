@@ -4,6 +4,8 @@ import { FaAngleUp, FaAngleDown } from "react-icons/fa";
 import { Link } from 'react-router-dom';
 import axiosInstance from '../../api/axiosInstance';
 import { useNavigate } from 'react-router-dom';
+import { useContext } from 'react';
+import { authContext } from '../../contextApi/AuthContext';
 
 function Header() {
 
@@ -12,6 +14,7 @@ function Header() {
   const [dp, setdp] = useState("");
   const [name, setName] = useState("");
   const [token, setToken] = useState("");
+  const { authUser, setAuthUser, role, setRole } = useContext(authContext)
 
   const nav=useNavigate()
 
@@ -31,6 +34,7 @@ function Header() {
 
   const logout=()=>{
     sessionStorage.clear()
+    setAuthUser(false)
     nav('/auth')
   }
 

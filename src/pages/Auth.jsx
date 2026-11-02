@@ -7,10 +7,13 @@ import { ToastContainer,toast } from 'react-toastify'
 import { useNavigate } from 'react-router-dom'
 import { GoogleLogin } from '@react-oauth/google';
 import { jwtDecode } from 'jwt-decode'
+import { useContext } from 'react'
+import { authContext } from '../contextApi/AuthContext'
 
 function Auth() {
 
   const [authStatus, setauthStatus] = useState(false)
+  const { authUser, setAuthUser, role, setRole } = useContext(authContext)
 
   const nav=useNavigate()
 
@@ -56,10 +59,13 @@ function Auth() {
       sessionStorage.setItem('token',response.data.token)
     sessionStorage.setItem('user',JSON.stringify(response.data.user))
     toast.success('Login Successfull..')
+    setAuthUser(true)
     setTimeout(()=>{
        if(response.data.user.role=="admin"){
+        setRole('admin')
       nav('/admin')
     }else{
+      setRole('user')
       nav('/')
     }
     },2000)
@@ -80,13 +86,16 @@ function Auth() {
       sessionStorage.setItem('token',response.data.token)
       sessionStorage.setItem('user',JSON.stringify(response.data.user))
       toast.success('Login Successfully')
+      setAuthUser(true)
       setTimeout(()=>{
         if(response.data.user.role=="admin"){
-        nav('/admin')
-      }
-      else{
-        nav('/')
-      }
+          setRole('admin')
+          nav('/admin')
+        }
+        else{
+          setRole('user')
+          nav('/')
+        }
       },2000)
       
     }

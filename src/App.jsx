@@ -16,9 +16,15 @@ import Settings from './Admin/pages/Settings'
 import PaymentFailed from './User/pages/PaymentFailed'
 import PaymentSuccess from './User/pages/PaymentSuccess'
 
+import { useContext } from 'react'
+import { authContext } from './contextApi/AuthContext'
+
 import Pnf from './pages/Pnf'
 
 function App() {
+
+  const { authUser, role } = useContext(authContext)
+  
 
   return (
     <>
@@ -27,16 +33,31 @@ function App() {
         <Route path='auth' element={<Auth/>} />
         <Route path='/*' element={<Pnf/>} />
 
-        <Route path='books' element={<Books/>} />
-        <Route path='booksdetail/:bid' element={<BookDetail/>} />
-        <Route path='contact' element={<Contact/>} />
-        <Route path='profile' element={<Profile/>} />
-        <Route path='success' element={<PaymentSuccess/>} />
-        <Route path='failed' element={<PaymentFailed/>} />
+        {
+          authUser && role === 'user' ? (
+            <>
+              <Route path='books' element={<Books/>} />
+              <Route path='booksdetail/:bid' element={<BookDetail/>} />
+              <Route path='contact' element={<Contact/>} />
+              <Route path='profile' element={<Profile/>} />
+              <Route path='success' element={<PaymentSuccess/>} />
+              <Route path='failed' element={<PaymentFailed/>} />
+            </>
+          ) : authUser && role === 'admin' ? (
+            <>
+              <Route path='admin' element={<Dashboard/>} />
+              <Route path='admin/resource' element={<Resources/>} />
+              <Route path='admin/sett' element={<Settings/>} />
+            </>
+          ) : (
+            <>
+              <Route path='books' element={<Books/>} />
+              <Route path='booksdetail/:bid' element={<BookDetail/>} />
+              <Route path='contact' element={<Contact/>} />
+            </>
+          )
+        }
 
-        <Route path='admin' element={<Dashboard/>} />
-        <Route path='admin/resource' element={<Resources/>} />
-        <Route path='admin/sett' element={<Settings/>} />
       </Routes>
     </>
   )

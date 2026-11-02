@@ -1,13 +1,17 @@
 import React from 'react'
 import { CiPower } from "react-icons/ci"
 import { useNavigate } from 'react-router-dom'
+import { useContext } from 'react'
+import { authContext } from '../../contextApi/AuthContext'
 
 function AdminHeader() {
 
   const nav=useNavigate()
+  const {  setAuthUser } = useContext(authContext)
 
  const logout=()=>{
     sessionStorage.clear()
+    setAuthUser(false)
     nav('/auth')
   }
    

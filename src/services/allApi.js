@@ -66,3 +66,7 @@ export const adminAllusersApi=async()=>{
 export const adminUpdateApi = async (data) => {
   return await apiService('PUT', '/update', data)
 }
+
+export const generateBookSummaryApi = async (data) => {
+    return await apiService('POST', '/generate-summary', data)
+}

@@ -5,9 +5,36 @@ import { FaLocationDot } from "react-icons/fa6";
 import { FaPhoneAlt } from "react-icons/fa";
 import { MdEmail } from "react-icons/md";
 import { IoMail } from 'react-icons/io5';
-
+import { useRef } from 'react';
+import emailjs from '@emailjs/browser'
+import { toast,ToastContainer } from 'react-toastify'
 
 function Contact() {
+
+
+  const form=useRef()
+
+  const Public_Key=import.meta.env.VITE_Publickey
+  const Emailid=import.meta.env.VITE_Emailid
+  const Templateid=import.meta.env.VITE_Templateid
+
+  const submitemail=(e)=>{
+    e.preventDefault()
+    console.log(form.current)
+    const {user_name,user_email,message}=form.current
+    if(user_name && user_email && message){
+      emailjs.sendForm(Emailid,Templateid,form.current,{publicKey:Public_Key}).then(()=>{
+      toast.success("Thanks for your feedbac")
+    }).catch((error)=>{
+      toast.error('Feedback sending failed')
+    })
+    }
+    else{
+      toast.warning('Enter valid inputs')
+    }
+  }
+
+
   return (
     <>
     <Header/>
@@ -48,16 +75,19 @@ function Contact() {
         <div className="grid  sm:grid-cols-1 md:grid-cols-2 gap-2">
           <div className='bg-gray-900 p-5 rounded-2xl'>
             <h1 className='text-center text-white'>Send A Message</h1>
-            <input type="text"  placeholder='Name' className='bg-white w-full mt-5 p-3'/>
-            <input type="text"  placeholder='Email' className='bg-white w-full mt-5 p-3'/>
-            <textarea name="" placeholder='Message' className='w-full bg-white mt-5 ' rows={7} id=""></textarea>
+            <form action="" ref={form} onSubmit={(e)=>submitemail(e)}>
+            <input type="text" name='user_name' placeholder='Name' className='bg-white w-full mt-5 p-3'/>
+            <input type="text" name='user_email' placeholder='Email' className='bg-white w-full mt-5 p-3'/>
+            <textarea name="message" placeholder='Message' className='w-full bg-white mt-5 ' rows={7} id=""></textarea>
             <button className="w-full bg-gray-700 text-white hover:bg-black p-2">Send</button>
+            </form>
           </div>
           <div className='rounded-2xl'>
             <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d15652.131896072086!2d75.77344221562537!3d11.258984622727242!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3ba65900d568d853%3A0x86dc9f15ee869de3!2sLuminar%20Technolab%20-%20Software%20training%20institute%20in%20Calicut!5e0!3m2!1sen!2sin!4v1788216534595!5m2!1sen!2sin" width="100%" height="100%"  allowfullscreen="" loading="lazy" referrerpolicy="strict-origin-when-cross-origin"></iframe>
           </div>
         </div>
       </section>
+      <ToastContainer position='top-center' autoClose={'3000'} />
     </div>
 
     <Footer/>
